@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> NoteScreen(title: "", content: "",)));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> NoteScreen(title: "No title", content: "",)));
         },
       ),
     );

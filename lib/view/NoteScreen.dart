@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:noteapp/controller/NoteController.dart';
+import 'package:noteapp/model/Note.dart';
 
 class NoteScreen extends StatefulWidget {
   String title = "No title";
@@ -15,9 +17,10 @@ class _NoteScreenState extends State<NoteScreen> {
 
   TextEditingController contentController = new TextEditingController();
 
+
   void initState(){
     super.initState();
-    widget.title = "No title";
+    
     contentController.text = widget.content;
   }
 
@@ -35,7 +38,7 @@ class _NoteScreenState extends State<NoteScreen> {
         backgroundColor: Colors.white,
         leading: FlatButton(
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.pop(context); 
           }, 
           child: Icon (Icons.arrow_back,
           size: 35,
@@ -43,8 +46,11 @@ class _NoteScreenState extends State<NoteScreen> {
           ),
           actions: <Widget>[
             FlatButton(
+              //Save note to local storage
               onPressed: () {
+                Note note = new Note(title: "My new note", content: contentController.text, timeCreated: DateTime.now().toString(), username: "HuyChu");
 
+                NoteController.saveNoteToLocalStorage(note);
               }, 
               child: Icon(Icons.save_alt,
               color: Colors.yellow,
