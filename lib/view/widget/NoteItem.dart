@@ -5,7 +5,7 @@ import 'package:noteapp/view/NoteScreen.dart';
 class NoteItem extends StatelessWidget {
   String title = "No title";
   String content = "";
-  DateTime created;
+  String created;
 
   NoteItem({this.title, @required this.content, @required this.created});
 

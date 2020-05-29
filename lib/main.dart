@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/view/HomeScreen.dart';
-import 'package:noteapp/view/NoteScreen.dart';
+void main(){
 
-void main() => runApp(MyApp());
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.yellow,
       ),
       home: HomeScreen(),
     );

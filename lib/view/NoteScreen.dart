@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/controller/NoteController.dart';
 import 'package:noteapp/model/Note.dart';
+import 'package:noteapp/view/widget/NoteItem.dart';
 
 class NoteScreen extends StatefulWidget {
   String title = "No title";
@@ -28,6 +29,7 @@ class _NoteScreenState extends State<NoteScreen> {
   Widget build(BuildContext context) {
     double scrWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      
       appBar: AppBar(
         title: Text(widget.title,
           style: TextStyle(
@@ -40,10 +42,11 @@ class _NoteScreenState extends State<NoteScreen> {
           onPressed: (){
             Navigator.pop(context); 
           }, 
-          child: Icon (Icons.arrow_back,
-          size: 35,
-          color:Colors.yellow)
-          ),
+          child: Icon(Icons.cancel,
+            color: Colors.yellowAccent[700],
+            size: 30,
+          )
+        ),
           actions: <Widget>[
             FlatButton(
               //Save note to local storage
@@ -53,7 +56,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 NoteController.saveNoteToLocalStorage(note);
               }, 
               child: Icon(Icons.save_alt,
-              color: Colors.yellow,
+              color: Colors.yellowAccent[700],
               size:35) )
           ],
       ),
@@ -61,11 +64,16 @@ class _NoteScreenState extends State<NoteScreen> {
         children: <Widget>[
           ConstrainedBox(
             constraints: BoxConstraints.expand(),
-            child: Container(   
+            child: Container(  
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage("lib/asset/paper.jpg"),
+                  fit: BoxFit.fill
+                )
+              ), 
               padding: EdgeInsets.symmetric(
-                horizontal: 15
+                vertical: 15,
+                horizontal: 20
               ),
-              color: Colors.grey[300],
               width: scrWidth,
               child: TextField(
                 controller: contentController,
@@ -73,11 +81,12 @@ class _NoteScreenState extends State<NoteScreen> {
                   border: InputBorder.none
                 ),
                 style: TextStyle(
-                  fontSize:30 ,
-                  color: Colors.black
+                  fontSize: 25,
+                  color: Colors.grey[800]
                 ),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
+                cursorColor: Colors.yellowAccent[700],
               ),
             ),
           ),
