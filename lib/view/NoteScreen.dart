@@ -1,14 +1,15 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noteapp/controller/NoteController.dart';
 import 'package:noteapp/model/Note.dart';
-import 'package:noteapp/view/widget/NoteItem.dart';
+import 'package:noteapp/view/widget/SnackBarNotifier.dart';
 
 class NoteScreen extends StatefulWidget {
-  String title = "No title";
+  String title = "Không tiêu đề";
   String content = "";
-
-  NoteScreen({this.title, this.content});
+  int id = -1;
+  NoteScreen({this.title, this.content, @required this.id});
 
   @override
   _NoteScreenState createState() => _NoteScreenState();
@@ -16,20 +17,23 @@ class NoteScreen extends StatefulWidget {
 
 class _NoteScreenState extends State<NoteScreen> {
 
-  TextEditingController contentController = new TextEditingController();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  TextEditingController _contentController = new TextEditingController();
+  TextEditingController _titleController = new TextEditingController();
+  int id;
 
   void initState(){
     super.initState();
-    
-    contentController.text = widget.content;
+    id = widget.id;
+    print(id.toString());
+    _contentController.text = widget.content;
   }
 
   @override
   Widget build(BuildContext context) {
     double scrWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title,
           style: TextStyle(
@@ -51,9 +55,50 @@ class _NoteScreenState extends State<NoteScreen> {
             FlatButton(
               //Save note to local storage
               onPressed: () {
-                Note note = new Note(title: "My new note", content: contentController.text, timeCreated: DateTime.now().toString(), username: "HuyChu");
+                if(_contentController.text == "") SnackBarNotifier.showSnackBar(_scaffoldKey, "Ghi chú chưa có nội dung", Colors.red);
+                else
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => new CupertinoAlertDialog(
+                    title: new Text("Nhập tên ghi chú"),
+                    content: Container(
+                      margin: EdgeInsets.only(
+                        top: 15
+                      ),
+                      child: CupertinoTextField(
+                        controller: _titleController,
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
+                    actions: <Widget> [
+                      FlatButton( 
+                        child: new Text("Xong",
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
+                        ),
+                        onPressed: (){
+                          Note note = new Note(title: _titleController.text ?? "Không tiêu đề", content: _contentController.text, timeCreated: DateTime.now().toString(), username: "HuyChu", id: id);
+                          if(id == -1) NoteController.saveNoteToLocalStorage(note);
+                          else NoteController.updateNoteWithID(note, id.toString());
 
-                NoteController.saveNoteToLocalStorage(note);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton( 
+                        child: new Text("Huỷ",
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
+                        ),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      )
+                    ])
+                );
               }, 
               child: Icon(Icons.save_alt,
               color: Colors.yellowAccent[700],
@@ -76,7 +121,7 @@ class _NoteScreenState extends State<NoteScreen> {
               ),
               width: scrWidth,
               child: TextField(
-                controller: contentController,
+                controller: _contentController,
                 decoration: InputDecoration(
                   border: InputBorder.none
                 ),
@@ -165,6 +210,7 @@ class _NoteScreenState extends State<NoteScreen> {
           )
         ],
       )
+      
     );
   }
 }
